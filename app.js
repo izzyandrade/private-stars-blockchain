@@ -1,12 +1,12 @@
-const express = require('express');
-const morgan = require('morgan');
-const bodyParser = require('body-parser');
-const BlockChain = require('./src/blockchain.js');
+import express from 'express';
+import morgan from 'morgan';
+import { urlencoded, json } from 'body-parser';
+import { Blockchain } from './src/components/blockchain.js';
 
 class ApplicationServer {
   constructor() {
     this.app = express();
-    this.blockchain = new BlockChain.Blockchain();
+    this.blockchain = new Blockchain();
     this.initExpress();
     this.initExpressMiddleWare();
     this.initControllers();
@@ -19,12 +19,15 @@ class ApplicationServer {
 
   initExpressMiddleWare() {
     this.app.use(morgan('dev'));
-    this.app.use(bodyParser.urlencoded({ extended: true }));
-    this.app.use(bodyParser.json());
+    this.app.use(urlencoded({ extended: true }));
+    this.app.use(json());
   }
 
   initControllers() {
-    require('./BlockchainController.js')(this.app, this.blockchain);
+    require('./src/controllers/BlockchainController.js')(
+      this.app,
+      this.blockchain
+    );
   }
 
   start() {

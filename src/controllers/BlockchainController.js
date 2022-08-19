@@ -1,4 +1,4 @@
-class BlockchainController {
+export default class BlockchainController {
   constructor(app, blockchainObj) {
     this.app = app;
     this.blockchain = blockchainObj;
@@ -111,7 +111,3 @@ class BlockchainController {
     });
   }
 }
-
-module.exports = (app, blockchainObj) => {
-  return new BlockchainController(app, blockchainObj);
-};
