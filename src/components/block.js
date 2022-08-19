@@ -14,8 +14,14 @@ class Block {
     let self = this;
     return new Promise((resolve, reject) => {
       let currentHash = self.hash;
-      let recalculatedHash = SHA256(JSON.stringify(self)).toString();
-      currentHash === recalculatedHash ? resolve(true) : reject(false);
+      let recalculatedHash = SHA256(
+        JSON.stringify({
+          ...self,
+          hash: null,
+        })
+      ).toString();
+      const isValid = currentHash === recalculatedHash;
+      resolve(isValid);
     });
   }
 
