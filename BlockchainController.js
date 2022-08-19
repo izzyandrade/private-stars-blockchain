@@ -1,15 +1,7 @@
-/**
- *          BlockchainController
- *
- * This class expose the endpoints that the client applications will use to interact with the
- * Blockchain dataset
- */
 class BlockchainController {
-  //The constructor receive the instance of the express.js app and the Blockchain class
   constructor(app, blockchainObj) {
     this.app = app;
     this.blockchain = blockchainObj;
-    // All the endpoints methods needs to be called in the constructor to initialize the route.
     this.getBlockByHeight();
     this.requestOwnership();
     this.submitStar();
@@ -17,7 +9,6 @@ class BlockchainController {
     this.getStarsByOwner();
   }
 
-  // Enpoint to Get a Block by Height (GET Endpoint)
   getBlockByHeight() {
     this.app.get('/block/height/:height', async (req, res) => {
       if (req.params.height) {
@@ -34,7 +25,6 @@ class BlockchainController {
     });
   }
 
-  // Endpoint that allows user to request Ownership of a Wallet address (POST Endpoint)
   requestOwnership() {
     this.app.post('/requestValidation', async (req, res) => {
       if (req.body.address) {
@@ -52,7 +42,6 @@ class BlockchainController {
     });
   }
 
-  // Endpoint that allow Submit a Star, yu need first to `requestOwnership` to have the message (POST endpoint)
   submitStar() {
     this.app.post('/submitstar', async (req, res) => {
       if (
@@ -86,7 +75,6 @@ class BlockchainController {
     });
   }
 
-  // This endpoint allows you to retrieve the block by hash (GET endpoint)
   getBlockByHash() {
     this.app.get('/block/hash/:hash', async (req, res) => {
       if (req.params.hash) {
@@ -103,7 +91,6 @@ class BlockchainController {
     });
   }
 
-  // This endpoint allows you to request the list of Stars registered by an owner
   getStarsByOwner() {
     this.app.get('/blocks/:address', async (req, res) => {
       if (req.params.address) {

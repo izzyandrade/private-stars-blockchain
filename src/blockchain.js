@@ -98,12 +98,6 @@ class Blockchain {
     });
   }
 
-  /**
-   * This method will return a Promise that will resolve with an array of Stars objects existing in the chain
-   * and are belongs to the owner with the wallet address passed as parameter.
-   * Remember the star should be returned decoded.
-   * @param {*} address
-   */
   getStarsByWalletAddress(address) {
     let self = this;
     let stars = [];
@@ -118,12 +112,6 @@ class Blockchain {
     });
   }
 
-  /**
-   * This method will return a Promise that will resolve with the list of errors when validating the chain.
-   * Steps to validate:
-   * 1. You should validate each block using `validateBlock`
-   * 2. Each Block should check the with the previousBlockHash
-   */
   validateChain() {
     let self = this;
     let errorLog = [];
