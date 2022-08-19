@@ -1,8 +1,8 @@
-const SHA256 = require('crypto-js/sha256');
-const BlockClass = require('./block.js');
-const bitcoinMessage = require('bitcoinjs-message');
+import SHA256 from 'crypto-js/sha256.js';
+import { Block } from './block.js';
+import { verify } from 'bitcoinjs-message';
 
-class Blockchain {
+export default class Blockchain {
   constructor() {
     this.chain = [];
     this.height = -1;
@@ -11,7 +11,7 @@ class Blockchain {
 
   async initializeChain() {
     if (this.height === -1) {
-      let block = new BlockClass.Block({
+      let block = new Block({
         data: 'Welcome to Cheesecake Blocks!',
       });
       await this._addBlock(block);
@@ -58,8 +58,8 @@ class Blockchain {
       let time = parseInt(message.split(':')[1]);
       let currentTime = parseInt(new Date().getTime().toString().slice(0, -3));
       if (currentTime - time < 300) {
-        if (bitcoinMessage.verify(message, address, signature)) {
-          let block = new BlockClass.Block({
+        if (verify(message, address, signature)) {
+          let block = new Block({
             owner: address,
             star: star,
           });
@@ -139,5 +139,3 @@ class Blockchain {
     });
   }
 }
-
-module.exports.Blockchain = Blockchain;

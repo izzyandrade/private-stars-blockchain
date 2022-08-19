@@ -1,5 +1,5 @@
-const SHA256 = require('crypto-js/sha256');
-const hex2ascii = require('hex2ascii');
+import SHA256 from 'crypto-js/sha256.js';
+import hex2ascii from 'hex2ascii';
 
 class Block {
   constructor(data) {
@@ -31,4 +31,5 @@ class Block {
   }
 }
 
-module.exports.Block = Block;
+const _Block = Block;
+export { _Block as Block };

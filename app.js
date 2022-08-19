@@ -1,7 +1,8 @@
 import express from 'express';
 import morgan from 'morgan';
-import { urlencoded, json } from 'body-parser';
-import { Blockchain } from './src/components/blockchain.js';
+import parser from 'body-parser';
+import Blockchain from './src/components/blockchain.js';
+import BlockchainController from './src/controllers/BlockchainController.js';
 
 class ApplicationServer {
   constructor() {
@@ -19,15 +20,12 @@ class ApplicationServer {
 
   initExpressMiddleWare() {
     this.app.use(morgan('dev'));
-    this.app.use(urlencoded({ extended: true }));
-    this.app.use(json());
+    this.app.use(parser.urlencoded({ extended: true }));
+    this.app.use(parser.json());
   }
 
   initControllers() {
-    require('./src/controllers/BlockchainController.js')(
-      this.app,
-      this.blockchain
-    );
+    new BlockchainController(this.app, this.blockchain);
   }
 
   start() {
