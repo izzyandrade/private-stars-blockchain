@@ -1,4 +1,4 @@
-import SHA256 from 'crypto-js/sha256';
+import SHA256 from 'crypto-js/sha256.js';
 import hex2ascii from 'hex2ascii';
 
 export default class Block {

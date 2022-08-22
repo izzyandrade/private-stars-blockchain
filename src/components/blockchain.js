@@ -35,8 +35,10 @@ export default class Blockchain {
         self.chain.push(block);
         self.height = self.height + 1;
         const errorLog = await self.validateChain();
-        if (!errorLog) {
+        if (errorLog.length === 0) {
           resolve(block);
+        } else {
+          reject(errorLog);
         }
       } catch (error) {
         reject(error);
@@ -119,12 +121,12 @@ export default class Blockchain {
     let self = this;
     let errorLog = [];
     return new Promise(async (resolve, reject) => {
-      self.chain.forEach((block) => {
+      self.chain.forEach((block, i) => {
         let previousBlock = self.chain[i - 1];
         if (!block.validate()) {
           errorLog.push(`Block ${block.height} hash is invalid`);
         }
-        if (block.previousBlockHash !== previousBlock.hash) {
+        if (block.previousBlockHash !== previousBlock?.hash) {
           errorLog.push(`Block ${block.height} previous hash is invalid`);
         }
         resolve(errorLog);
