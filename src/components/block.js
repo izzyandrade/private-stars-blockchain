@@ -1,7 +1,7 @@
-import SHA256 from 'crypto-js/sha256.js';
+import SHA256 from 'crypto-js/sha256';
 import hex2ascii from 'hex2ascii';
 
-class Block {
+export default class Block {
   constructor(data) {
     this.hash = null;
     this.height = 0;
@@ -36,6 +36,3 @@ class Block {
     });
   }
 }
-
-const _Block = Block;
-export { _Block as Block };

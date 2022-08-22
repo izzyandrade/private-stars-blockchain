@@ -25,6 +25,17 @@ export default class BlockchainController {
     });
   }
 
+  validateChain() {
+    this.app.get('/validateChain', async (req, res) => {
+      const errorLog = await this.blockchain.validateChain();
+      if (!errorLog) {
+        return res.status(200).send('Chain is valid!');
+      } else {
+        return res.status(500).send(errorLog);
+      }
+    });
+  }
+
   requestOwnership() {
     this.app.post('/requestValidation', async (req, res) => {
       if (req.body.address) {

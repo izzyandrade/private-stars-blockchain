@@ -1,5 +1,5 @@
 import SHA256 from 'crypto-js/sha256.js';
-import { Block } from './block.js';
+import Block from './block.js';
 import { verify } from 'bitcoinjs-message';
 
 export default class Blockchain {
@@ -34,7 +34,10 @@ export default class Blockchain {
         block.hash = SHA256(JSON.stringify(block)).toString();
         self.chain.push(block);
         self.height = self.height + 1;
-        resolve(block);
+        const errorLog = await self.validateChain();
+        if (!errorLog) {
+          resolve(block);
+        }
       } catch (error) {
         reject(error);
       }
@@ -116,26 +119,16 @@ export default class Blockchain {
     let self = this;
     let errorLog = [];
     return new Promise(async (resolve, reject) => {
-      for (let i = 0; i < self.chain.length; i++) {
-        let block = self.chain[i];
-        if (i === 0) {
-          if (block.hash !== block.calculateHash()) {
-            errorLog.push(`Invalid hash for block ${i}`);
-          }
-        } else {
-          if (block.hash !== block.calculateHash()) {
-            errorLog.push(`Invalid hash for block ${i}`);
-          }
-          if (block.previousBlockHash !== self?.chain[i - 1]?.hash) {
-            errorLog.push(`Invalid previous hash for block ${i}`);
-          }
+      self.chain.forEach((block) => {
+        let previousBlock = self.chain[i - 1];
+        if (!block.validate()) {
+          errorLog.push(`Block ${block.height} hash is invalid`);
         }
-      }
-      if (errorLog.length > 0) {
-        reject(errorLog);
-      } else {
-        resolve(true);
-      }
+        if (block.previousBlockHash !== previousBlock.hash) {
+          errorLog.push(`Block ${block.height} previous hash is invalid`);
+        }
+        resolve(errorLog);
+      });
     });
   }
 }
