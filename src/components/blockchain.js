@@ -120,16 +120,18 @@ export default class Blockchain {
   validateChain() {
     let self = this;
     let errorLog = [];
-    return new Promise(async (resolve, reject) => {
+    return new Promise(async (resolve) => {
       self.chain.forEach((block, i) => {
         let previousBlock = self.chain[i - 1];
-        if (!block.validate()) {
-          errorLog.push(`Block ${block.height} hash is invalid`);
-        }
-        if (block.previousBlockHash !== previousBlock?.hash) {
-          errorLog.push(`Block ${block.height} previous hash is invalid`);
-        }
-        resolve(errorLog);
+        block.validate().then((isBlockValid) => {
+          if (!isBlockValid) {
+            errorLog.push(`Block ${block.height} hash is invalid`);
+          }
+          if (block.previousBlockHash !== previousBlock?.hash) {
+            errorLog.push(`Block ${block.height} previous hash is invalid`);
+          }
+          resolve(errorLog);
+        });
       });
     });
   }
